@@ -7,7 +7,7 @@ os:
 notifications:
   email: true
 script:
-- ./jme3-bullet-native/make.sh travis build
+- ./make.sh travis build
 before_install:
 - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get -qq update ; fi
 - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -y wget unzip  ".*-mingw-w64-.*" libgd2-xpm:i386 libgd2-xpm ia32-libs-multiarch ia32-libs build-essential gcc-multilib g++-multilib ;fi
