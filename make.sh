@@ -95,7 +95,7 @@ function buildLinux {
       -Ibuild/bullet/src/
       -I$JDK_ROOT/include
       -I$JDK_ROOT/include/linux
-      -Isrc/native/cpp -pthread 
+      -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp -pthread 
       $(cat build/tmp/cpplist.txt)
        -Wl,-soname,bulletjme.so -o $OUT_PATH/libbulletjme.so  -lrt"
     clr_escape "$(echo $build_script)" $CLR_BOLD $CLR_BLUE
@@ -118,9 +118,9 @@ function buildWindows {
 
 
     build_script="
-    $compiler -mtune=generic -DBT_NO_PROFILE=1 -fpermissive -fPIC -U_FORTIFY_SOURCE -O3 -DWIN32  -shared
+    $compiler -mtune=generic -DBT_NO_PROFILE=1 -fpermissive  -U_FORTIFY_SOURCE -O3 -DWIN32  -shared
        -Ibuild/bullet/src/
-      -Isrc/native/cpp  -static
+      -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp  -static
       $(cat build/tmp/cpplist.txt)
        -Wl,-soname,bulletjme.dll  -o $OUT_PATH/bulletjme.dll"
     clr_escape "$(echo $build_script)" $CLR_BOLD $CLR_BLUE
@@ -160,7 +160,7 @@ function buildMac {
     build_script="
     g++ -mtune=generic -DBT_NO_PROFILE=1 -fpermissive $arch_flag -U_FORTIFY_SOURCE -fPIC -O3  -shared
         -Ibuild/bullet/src/
-      -Isrc/native/cpp 
+      -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp 
             -I$JDK_ROOT/include
       -I$JDK_ROOT/include/darwin
        $(cat build/tmp/cpplist.txt)
