@@ -1,0 +1,23 @@
+sudo: required
+language: java
+dist: mega
+os:
+- linux
+- osx
+notifications:
+  email: true
+script:
+- ./jme3-bullet-native/make.sh travis build
+before_install:
+- if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get -qq update ; fi
+- if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -y wget unzip  ".*-mingw-w64-.*" libgd2-xpm:i386 libgd2-xpm ia32-libs-multiarch ia32-libs build-essential gcc-multilib g++-multilib ;fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then  brew update  ;fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then  brew tap caskroom/cask ; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then  brew install brew-cask ; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then  brew cask install java ; fi
+after_success:
+- ./jme3-bullet-native/make.sh travis build
+env:
+  global:
+  - BINTRAY_USER: riccardo
+  - secure: "GazCAwzB2ZxQycyRVBi0ugcm+Ka8a3gFA9Rum8rl649O7Y6zIJQ1Yr58TXU0U+sLyPnLmMj8X+BfIDSkAPqJQ1ngkpcMI9BjrqRLaRz3oQTX7wdGTP750h/mQOiPCzFhY6AMc1dAl4pMAcBaAoUcyA7ZhhSILMcD28kEx+DfQSGJ3ZliD42UMLz0t7iVD3XIlB2n7jN3k8bHCdCAFNAVnNNanSaBDcRyTO0d06pQ0ORoSybDpffOaiMzZfb/J6XXu94oDiyHpPUgfg30fORdoJsjDsj2FBMg6lv+w4W3aRFcgICDd+Abfn0+2nu6uqFFNoAdFwHS+zSZSEm3da77rrFwumb4Af/QRC1StUcz7y98IFB10CZ8fFkzKtH3sKH6PT9s+Ci+E8NElVi9B4kGPM2Ddid05qaCBk1tAQzYEIaCO7nwiC2t9m1Q+v8DviwKK8as56jT7cdsmCNNDrlbBX5GLJ7I4dFYpXeD/7ZDTfCNzqUlQR9EfiLPipz54JQwYPGYpvgXQocchI3kgybK0Hy9tjiqlAVlgUtYREiygf34FjCEGU8cnUwqz5eQ+6qj8GibtujdPk+Mt7zEhBwTuGkvMVgqG32LFpeEFZgbYJzrdOHjy+cc9avscrqVhZVxzyfHP8Pm7t1NvAbBjnJNo5Un/14q27M/npsd+lEQjU4="
