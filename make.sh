@@ -75,7 +75,7 @@ function findCppFiles {
     find  build/bullet/src/BulletSoftBody -type f -name '*.cpp' >> build/tmp/cpplist.txt
     find  build/bullet/src/LinearMath -type f -name '*.cpp' >> build/tmp/cpplist.txt
     find  build/bullet/src/clew -type f -name '*.cpp' >> build/tmp/cpplist.txt
-    find  build/tmp/jmonkeyengine/src/native/cpp/ -type f -name '*.cpp' >> build/tmp/cpplist.txt
+    find  build/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp/ -type f -name '*.cpp' >> build/tmp/cpplist.txt
 
 }
 
