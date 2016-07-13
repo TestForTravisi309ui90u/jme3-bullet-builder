@@ -118,12 +118,12 @@ function buildWindows {
 
 
     build_script="
-    $compiler -mtune=generic -DBT_NO_PROFILE=1 -fpermissive  -U_FORTIFY_SOURCE -O3 -DWIN32  -shared
+    $compiler -mtune=generic -DBT_NO_PROFILE=1 -fpermissive -fPIC   -U_FORTIFY_SOURCE -O3 -DWIN32  -shared
        -Ibuild/bullet/src/
         -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp/fake_win32
         -I$JDK_ROOT/include
       -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp  -static
-      $(cat build/tmp/cpplist.txt)
+      $(cat build/tmp/cpplist.txt) -Wp,-w 
        -Wl,-soname,bulletjme.dll  -o $OUT_PATH/bulletjme.dll"
     clr_escape "$(echo $build_script)" $CLR_BOLD $CLR_BLUE
     $build_script
