@@ -16,7 +16,7 @@ before_install:
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then  brew install brew-cask ; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then  brew cask install java ; fi
 after_success:
-- ./jme3-bullet-native/make.sh travis build
+- ./make.sh travis build
 env:
   global:
   - BINTRAY_USER: riccardo
