@@ -1,7 +1,12 @@
 #!/bin/bash
 
+# Configuration##
+REPO="https://github.com/riccardobl/jmonkeyengine.git"
+BRANCH="frk"
+#############
+
 VERSION="1.1"
-DEPLOY="false"
+DEPLOY="false" 
 JDK_ROOT="$JAVA_HOME"
 if [ ! -f "$JDK_ROOT/include/jni.h" ];
 then
@@ -174,13 +179,16 @@ function buildMac {
         arch_flag="-arch i386"
     fi
 
+    findCppFiles
+
     build_script="
     g++ -mtune=generic -DBT_NO_PROFILE=1 -fpermissive $arch_flag -U_FORTIFY_SOURCE -fPIC -Ofast   -shared
         -Ibuild/bullet/src/
       -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp 
             -I$JDK_ROOT/include
       -I$JDK_ROOT/include/darwin
-       $(cat build/tmp/cpplist.txt)
+         $(cat  build/tmp/IIlist.txt) 
+      $(cat build/tmp/cpplist.txt)
         -o $OUT_PATH/libbulletjme.dylib"
     clr_escape "$(echo $build_script)" $CLR_BOLD $CLR_BLUE
     $build_script
@@ -208,23 +216,23 @@ function travis {
         rm -Rf deploy
         mkdir -p deploy/
         
-        out=`curl -u$BINTRAY_USER:$BINTRAY_API_KEY --silent --head --write-out '%{http_code}'  -o deploy/tmpl.tar.gz.h  https://dl.bintray.com/riccardo/jme3-bullet-native-files/$VERSION/libs-winLinux-$VERSION.tar.gz`
+        out=`curl -u$BINTRAY_USER:$BINTRAY_API_KEY --silent --head --write-out '%{http_code}'  -o deploy/tmpl.tar.gz.h  https://dl.bintray.com/riccardo/jme3-bullet-native-files/$BRANCH-$VERSION/libs-winLinux-$BRANCH-$VERSION.tar.gz`
         if [ "$out" != "200" ];
         then
             echo "[warning] Windows and Linux libs not found. Skip deploy."
             exit 0
         fi
         
-        out=`curl -u$BINTRAY_USER:$BINTRAY_API_KEY --silent --head --write-out '%{http_code}'  -o deploy/tmpm.tar.gz.h https://dl.bintray.com/riccardo/jme3-bullet-native-files/$VERSION/libs-mac-$VERSION.tar.gz`
+        out=`curl -u$BINTRAY_USER:$BINTRAY_API_KEY --silent --head --write-out '%{http_code}'  -o deploy/tmpm.tar.gz.h https://dl.bintray.com/riccardo/jme3-bullet-native-files/$BRANCH-$VERSION/libs-mac-$BRANCH-$VERSION.tar.gz`
         if [ "$out" != "200" ];
         then
             echo "[warning] Mac libs not found. Skip deploy."
             exit 0
         fi
         
-        curl -u$BINTRAY_USER:$BINTRAY_API_KEY --silent  -o deploy/tmpl.tar.gz https://dl.bintray.com/riccardo/jme3-bullet-native-files/$VERSION/libs-winLinux-$VERSION.tar.gz   
+        curl -u$BINTRAY_USER:$BINTRAY_API_KEY --silent  -o deploy/tmpl.tar.gz https://dl.bintray.com/riccardo/jme3-bullet-native-files/$BRANCH-$VERSION/libs-winLinux-$BRANCH-$VERSION.tar.gz   
        
-        curl -u$BINTRAY_USER:$BINTRAY_API_KEY --silent  -o deploy/tmpm.tar.gz https://dl.bintray.com/riccardo/jme3-bullet-native-files/$VERSION/libs-mac-$VERSION.tar.gz
+        curl -u$BINTRAY_USER:$BINTRAY_API_KEY --silent  -o deploy/tmpm.tar.gz https://dl.bintray.com/riccardo/jme3-bullet-native-files/$BRANCH-$VERSION/libs-mac-$BRANCH-$VERSION.tar.gz
       
         echo "Deploy!"
     
@@ -250,9 +258,9 @@ function travis {
             if [ "$DEPLOY" = "true" ];
             then           
                 mkdir -p deploy/
-                tar -C build/lib/ -czf deploy/libs-winLinux-$VERSION.tar.gz .
-                curl -X PUT  -T  deploy/libs-winLinux-$VERSION.tar.gz -u$BINTRAY_USER:$BINTRAY_API_KEY\
-                "https://api.bintray.com/content/riccardo/jme3-bullet-native-files/libs/$VERSION/$VERSION/"
+                tar -C build/lib/ -czf deploy/libs-winLinux-$BRANCH-$VERSION.tar.gz .
+                curl -X PUT  -T  deploy/libs-winLinux-$BRANCH-$VERSION.tar.gz -u$BINTRAY_USER:$BINTRAY_API_KEY\
+                "https://api.bintray.com/content/riccardo/jme3-bullet-native-files/libs/$BRANCH-$VERSION/$BRANCH-$VERSION/"
            fi 
         fi
         if [ "$TRAVIS_OS_NAME" = "osx" ];
@@ -262,9 +270,9 @@ function travis {
             if [ "$DEPLOY" = "true" ];
             then    
                 mkdir -p deploy/
-                tar -C build/lib/ -czf deploy/libs-mac-$VERSION.tar.gz .
-                curl -X PUT  -T  deploy/libs-mac-$VERSION.tar.gz -u$BINTRAY_USER:$BINTRAY_API_KEY\
-                "https://api.bintray.com/content/riccardo/jme3-bullet-native-files/libs/$VERSION/$VERSION/"
+                tar -C build/lib/ -czf deploy/libs-mac-$BRANCH-$VERSION.tar.gz .
+                curl -X PUT  -T  deploy/libs-mac-$BRANCH-$VERSION.tar.gz -u$BINTRAY_USER:$BINTRAY_API_KEY\
+                "https://api.bintray.com/content/riccardo/jme3-bullet-native-files/libs/$BRANCH-$VERSION/$BRANCH-$VERSION/"
 
             fi 
         fi
@@ -283,10 +291,9 @@ function buildAll {
 cleanTMP
 if [ ! -d "build/jmonkeyengine" ]; then
     clr_green "Clone engine..."
-#git clone https://github.com/jMonkeyEngine/jmonkeyengine.git build/jmonkeyengine
-    git clone https://github.com/riccardobl/jmonkeyengine.git build/jmonkeyengine
+    git clone $REPO build/jmonkeyengine
     cd build/jmonkeyengine
-    git checkout frk
+    git checkout $BRANCH
     cd ../../
 fi
 cp -Rf build/jmonkeyengine build/tmp/jmonkeyengine 
