@@ -13,8 +13,8 @@ if [ "$TRAVIS_OS_NAME" = "osx" ];
 then
     READ_LINK="greadlink"
 fi
-echo "$($READ_LINK -f `which java` | sed "s:/bin/java::")"
-ls "$($READ_LINK -f `which java` | sed "s:/bin/java::")"
+echo "$($READ_LINK -f `which java` | sed "s:/jre/bin/java::")"
+ls "$($READ_LINK -f `which java` | sed "s:/jre/bin/java::")"
 if [ ! -f "$JDK_ROOT/include/jni.h" ];
 then
     JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/bin/java::")"
