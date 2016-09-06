@@ -23,7 +23,11 @@ then
         JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/jre/bin/java::")"
         if [ ! -f "$JDK_ROOT/include/jni.h" ];
         then
-            echo "Can't find JDK"
+           JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/Commands/java::")"
+            if [ ! -f "$JDK_ROOT/Headers/jni.h" ];
+            then
+                echo "Can't find JDK"
+            fi
         fi
     fi
 fi
