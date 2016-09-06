@@ -76,7 +76,20 @@ function findCppFiles {
     find  build/bullet/src/LinearMath -type f -name '*.cpp' >> build/tmp/cpplist.txt
     find  build/bullet/src/clew -type f -name '*.cpp' >> build/tmp/cpplist.txt
     find  build/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp/ -type f -name '*.cpp' >> build/tmp/cpplist.txt
+    find  build/bullet/src/Bullet3Common -type f -name '*.cpp' >> build/tmp/cpplist.txt
 
+    
+    find  build/bullet/src/BulletCollision -type d  >> build/tmp/Ilist.txt
+    find  build/bullet/src/BulletDynamics -type d  >> build/tmp/Ilist.txt
+    find  build/bullet/src/BulletInverseDynamics -type d >> build/tmp/Ilist.txt
+    find  build/bullet/src/BulletSoftBody -type d  >> build/tmp/Ilist.txt
+    find  build/bullet/src/LinearMath -type d  >> build/tmp/Ilist.txt
+    find  build/bullet/src/clew -type d  >> build/tmp/Ilist.txt
+    find  build/bullet/src/Bullet3Common -type d  >> build/tmp/Ilist.txt
+
+    for line in $(cat  build/tmp/Ilist.txt); do 
+        echo "-I$line " >>  build/tmp/IIlist.txt
+    done  
 }
 
 function buildLinux {
@@ -91,11 +104,12 @@ function buildLinux {
     
     findCppFiles
     build_script="
-    g++ -mtune=generic -DBT_NO_PROFILE=1 -fpermissive -U_FORTIFY_SOURCE -fPIC -O3 $arch_flag -shared
+    g++ -mtune=generic -DBT_NO_PROFILE=1 -fpermissive -U_FORTIFY_SOURCE -fPIC -Ofast  $arch_flag -shared
       -Ibuild/bullet/src/
       -I$JDK_ROOT/include
       -I$JDK_ROOT/include/linux
-      -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp -pthread 
+      -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp -pthread
+      $(cat  build/tmp/IIlist.txt) 
       $(cat build/tmp/cpplist.txt)
        -Wl,-soname,bulletjme.so -o $OUT_PATH/libbulletjme.so  -lrt"
     clr_escape "$(echo $build_script)" $CLR_BOLD $CLR_BLUE
@@ -118,13 +132,14 @@ function buildWindows {
 
 
     build_script="
-    $compiler -mtune=generic -DBT_NO_PROFILE=1 -fpermissive -fPIC   -U_FORTIFY_SOURCE -O3 -DWIN32  -shared
+    $compiler -mtune=generic -DBT_NO_PROFILE=1 -fpermissive -fPIC   -U_FORTIFY_SOURCE -Ofast  -DWIN32  -shared -static
        -Ibuild/bullet/src/
-        -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp/fake_win32
-        -I$JDK_ROOT/include
-      -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp  -static
+       -I$JDK_ROOT/include
+       -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp/fake_win32
+       -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp        
+       $(cat  build/tmp/IIlist.txt) 
       $(cat build/tmp/cpplist.txt) -Wp,-w 
-       -Wl,-soname,bulletjme.dll  -o $OUT_PATH/bulletjme.dll"
+       -Wl,--exclude-all-symbols,-soname,bulletjme.dll  -o $OUT_PATH/bulletjme.dll"
     clr_escape "$(echo $build_script)" $CLR_BOLD $CLR_BLUE
     $build_script
     if [ $? -ne 0 ]; then exit 1; fi
@@ -160,7 +175,7 @@ function buildMac {
     fi
 
     build_script="
-    g++ -mtune=generic -DBT_NO_PROFILE=1 -fpermissive $arch_flag -U_FORTIFY_SOURCE -fPIC -O3  -shared
+    g++ -mtune=generic -DBT_NO_PROFILE=1 -fpermissive $arch_flag -U_FORTIFY_SOURCE -fPIC -Ofast   -shared
         -Ibuild/bullet/src/
       -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp 
             -I$JDK_ROOT/include
@@ -266,8 +281,16 @@ function buildAll {
 }
 
 cleanTMP
-clr_green "Clone engine..."
-git clone https://github.com/riccardobl/jmonkeyengine.git build/tmp/jmonkeyengine
+if [ ! -d "build/jmonkeyengine" ]; then
+    clr_green "Clone engine..."
+#git clone https://github.com/jMonkeyEngine/jmonkeyengine.git build/jmonkeyengine
+    git clone https://github.com/riccardobl/jmonkeyengine.git build/jmonkeyengine
+    cd build/jmonkeyengine
+    git checkout frk
+    cd ../../
+fi
+cp -Rf build/jmonkeyengine build/tmp/jmonkeyengine 
+
 if [ "$1" = "" ];
 then
     echo "Usage: make.sh target"
