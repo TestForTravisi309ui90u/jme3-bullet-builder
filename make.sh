@@ -8,12 +8,18 @@ BRANCH="frk"
 VERSION="1.1"
 DEPLOY="false" 
 JDK_ROOT="$JAVA_HOME"
+READ_LINK="readlink"
+if [ "$TRAVIS_OS_NAME" = "osx" ];
+then
+    READ_LINK="greadlink"
+fi
+
 if [ ! -f "$JDK_ROOT/include/jni.h" ];
 then
-    JDK_ROOT="$(readlink -f `which java` | sed "s:/bin/java::")"
+    JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/bin/java::")"
     if [ ! -f "$JDK_ROOT/include/jni.h" ];
     then
-        JDK_ROOT="$(readlink -f `which java` | sed "s:/jre/bin/java::")"
+        JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/jre/bin/java::")"
         if [ ! -f "$JDK_ROOT/include/jni.h" ];
         then
             echo "Can't find JDK"
@@ -290,7 +296,7 @@ function buildAll {
 
 cleanTMP
 if [ ! -d "build/jmonkeyengine" ]; then
-    clr_green "Clone engine..."
+    clr_green "Clone engine $REPO:$BRANCH..."
     git clone $REPO build/jmonkeyengine
     cd build/jmonkeyengine
     git checkout $BRANCH
