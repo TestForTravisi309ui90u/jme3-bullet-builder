@@ -3,7 +3,7 @@
 # Configuration##
 REPO_NAME="riccardobl"
 BRANCH="travis-auto"
-GROUP="org.jmonkeyengine"
+GROUP="org.jmonkeyengine.bullet_builder"
 
 #############
 if [ "$BRANCH" == "travis-auto" ];
