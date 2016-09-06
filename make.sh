@@ -155,11 +155,11 @@ function buildWindows64 {
 }
 
 function buildMac32 {
-    buildWindows "x86"   
+    buildMac "x86"   
 }
 
 function buildMac64 {
-    buildWindows "x86_64"   
+    buildMac "x86_64"   
 }
 
 
