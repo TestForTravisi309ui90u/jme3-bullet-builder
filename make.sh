@@ -5,6 +5,7 @@ REPO_NAME="riccardobl"
 BRANCH="travis-auto"
 #############
 if [ "$BRANCH" == "travis-auto" ];
+then
     BRANCH=$TRAVIS_BRANCH
 fi
 
