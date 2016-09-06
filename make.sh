@@ -16,6 +16,9 @@ then
 fi
 
 JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/Commands/java::")"
+ls $JDK_ROOT/A/Headers/
+ls $JDK_ROOT/A/
+ls $JDK_ROOT/
 if [ ! -f "$JDK_ROOT/A/Headers/jni.h" ];
 then
     JDK_ROOT="$JAVA_HOME"
