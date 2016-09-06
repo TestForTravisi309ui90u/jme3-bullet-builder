@@ -266,10 +266,10 @@ function travis {
       #  ls -l build/lib/native
         `which jar` cf deploy/jme3-bullet-native-$BINTRAY_VERSION.jar -C build/lib .
          target_dir=${GROUP//./\/}
-        curl -X PUT  -T  f deploy/jme3-bullet-native-$BINTRAY_VERSION.jar -u$BINTRAY_USER:$BINTRAY_API_KEY \
+        curl -X PUT  -T  deploy/jme3-bullet-native-$BINTRAY_VERSION.jar -u$BINTRAY_USER:$BINTRAY_API_KEY \
 "ttps://api.bintray.com/content/riccardo/jme3-bullet-native/jme3-bullet-native/$BINTRAY_VERSION/$target_dir/jme3-bullet-native/$BINTRAY_VERSION/jme3-bullet-native-$BINTRAY_VERSION.jar?publish=1&override=1"
         
-        curl -X PUT  -T  f deploy/jme3-bullet-native-$BINTRAY_VERSION.jar -u$BINTRAY_USER:$BINTRAY_API_KEY \
+        curl -X PUT  -T  deploy/jme3-bullet-native-$BINTRAY_VERSION.jar -u$BINTRAY_USER:$BINTRAY_API_KEY \
 "ttps://api.bintray.com/content/riccardo/jme3-bullet-native/jme3-bullet-native/$BINTRAY_SNAPSHOT/$target_dir/jme3-bullet-native/$BINTRAY_SNAPSHOT/jme3-bullet-native-$BINTRAY_SNAPSHOT.jar?publish=1&override=1"
         
      #   curl -X PUT  -T  build/release/vhacd-native-$VERSION.jar -u$BINTRAY_USER:$BINTRAY_API_KEY\
