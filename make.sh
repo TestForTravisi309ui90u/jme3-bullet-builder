@@ -16,10 +16,9 @@ then
 fi
 
 JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/Commands/java::")"
-ls $JDK_ROOT/A/Headers/
-ls $JDK_ROOT/A/
+ls $JDK_ROOT/Headers/
 ls $JDK_ROOT/
-if [ ! -f "$JDK_ROOT/A/Headers/jni.h" ];
+if [ ! -f "$JDK_ROOT/Headers/jni.h" ];
 then
     JDK_ROOT="$JAVA_HOME"
     if [ ! -f "$JDK_ROOT/include/jni.h" ];
@@ -200,8 +199,8 @@ function buildMac {
     g++ -mtune=generic -DBT_NO_PROFILE=1 -fpermissive $arch_flag -U_FORTIFY_SOURCE -fPIC -Ofast   -shared
         -Ibuild/bullet/src/
       -Ibuild/tmp/jmonkeyengine/jme3-bullet-native/src/native/cpp 
-            -I$JDK_ROOT/A/Headers/
-      -I$JDK_ROOT/A/Headers/darwin
+            -I$JDK_ROOT/Headers/
+      -I$JDK_ROOT/Headers/darwin
          $(cat  build/tmp/IIlist.txt) 
       $(cat build/tmp/cpplist.txt)
         -o $OUT_PATH/libbulletjme.dylib"
