@@ -9,22 +9,19 @@ VERSION="1.1"
 DEPLOY="false" 
 JDK_ROOT="$JAVA_HOME"
 READ_LINK="readlink"
-if [ "$TRAVIS_OS_NAME" = "osx" ];
-then
-    READ_LINK="greadlink"
-fi
-echo "$($READ_LINK -f `which java` | sed "s:/jre/bin/java::")"
-ls "$($READ_LINK -f `which java` | sed "s:/jre/bin/java::")"
+if [ "`which greadlink`" != "" ]; then READ_LINK="greadlink" ; fi
+
+JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/Commands/java::")"
 if [ ! -f "$JDK_ROOT/include/jni.h" ];
 then
-    JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/bin/java::")"
+    JDK_ROOT="$JAVA_HOME"
     if [ ! -f "$JDK_ROOT/include/jni.h" ];
     then
-        JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/jre/bin/java::")"
+        JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/bin/java::")"
         if [ ! -f "$JDK_ROOT/include/jni.h" ];
         then
-           JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/Commands/java::")"
-            if [ ! -f "$JDK_ROOT/Headers/jni.h" ];
+            JDK_ROOT="$($READ_LINK -f `which java` | sed "s:/jre/bin/java::")"
+            if [ ! -f "$JDK_ROOT/include/jni.h" ];
             then
                 echo "Can't find JDK"
             fi
