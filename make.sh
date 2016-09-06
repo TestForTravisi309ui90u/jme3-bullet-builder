@@ -4,7 +4,7 @@
 REPO_NAME="riccardobl"
 BRANCH="travis-auto"
 #############
-if [ "$BRANCH" =="travis-auto" ];
+if [ "$BRANCH" == "travis-auto" ];
     BRANCH=$TRAVIS_BRANCH
 fi
 
@@ -261,6 +261,7 @@ function travis {
 
         tar -xzf deploy/tmpl.tar.gz -C build/lib/
         tar -xzf deploy/tmpm.tar.gz -C build/lib/
+        ls -l build/lib
         
         
      #   curl -X PUT  -T  build/release/vhacd-native-$VERSION.jar -u$BINTRAY_USER:$BINTRAY_API_KEY\
