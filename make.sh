@@ -1,4 +1,6 @@
 #!/bin/bash
+# Author: Riccardo Balbo
+# License: CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
 
 # Configurations
 if [ "$REPO_NAME" == "" ];
@@ -241,7 +243,7 @@ function travis {
     fi
     
     BINTRAY_VERSION="$REPO_NAME-$BRANCH-$VERSION"
-    BINTRAY_SNAPSHOT="$REPO_NAME-$BRANCH-SNAPSHOT"
+   # BINTRAY_SNAPSHOT="$REPO_NAME-$BRANCH-SNAPSHOT"
 
     echo "Run travis $1"
     if [ "$1" = "deploy" ];
@@ -291,8 +293,8 @@ function travis {
          target_dir=${GROUP//./\/}
          curl -X PUT  -T  deploy/jme3-bullet-native-$BINTRAY_VERSION.jar -u$BINTRAY_USER:$BINTRAY_API_KEY \
 "https://api.bintray.com/content/riccardo/jme3-bullet-native/jme3-bullet-native/$BINTRAY_VERSION/$target_dir/jme3-bullet-native/$BINTRAY_VERSION/jme3-bullet-native-$BINTRAY_VERSION.jar?publish=1&override=1"
-        curl -X PUT  -T  deploy/jme3-bullet-native-$BINTRAY_VERSION.jar -u$BINTRAY_USER:$BINTRAY_API_KEY \
-"https://api.bintray.com/content/riccardo/jme3-bullet-native/jme3-bullet-native/$BINTRAY_SNAPSHOT/$target_dir/jme3-bullet-native/$BINTRAY_SNAPSHOT/jme3-bullet-native-$BINTRAY_SNAPSHOT.jar?publish=1&override=1"
+        #curl -X PUT  -T  deploy/jme3-bullet-native-$BINTRAY_VERSION.jar -u$BINTRAY_USER:$BINTRAY_API_KEY \
+#"https://api.bintray.com/content/riccardo/jme3-bullet-native/jme3-bullet-native/$BINTRAY_SNAPSHOT/$target_dir/jme3-bullet-native/$BINTRAY_SNAPSHOT/jme3-bullet-native-$BINTRAY_SNAPSHOT.jar?publish=1&override=1"
                 
     else
         if [ "$TRAVIS_OS_NAME" = "linux" ];
