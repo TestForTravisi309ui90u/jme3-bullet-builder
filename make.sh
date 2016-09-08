@@ -358,4 +358,4 @@ function main(){
 
 
 #Start script
-main $@
+#main $@
